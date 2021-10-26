@@ -19,8 +19,13 @@ public class Main {
         if (select == 1){
 
         }else if (select == 2){
-            for (int i=0; i<=Menu.list.length-2; i++){
+            System.out.println("Tryk 1 for at lave en ny ordre\nTryk 2 for at redigere en eksisterende ordre");
+            int select1 = Integer.parseInt(input.nextLine());
+            if (select1 == 1){
+                for (int i=0; i<=Menu.list.length-2; i++){
                 System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
+            }
+                CreateOrder.createPizza(input);
             }
             //Call edit order method
         }else if (select == 3){
@@ -28,7 +33,7 @@ public class Main {
         }else if (select == 4){
             //Call order statistics
         }else if(select == 5){
-            CreateOrder.createPizza(input);
+            //CreateOrder.createPizza(input);
         }
         if (select != 6){
             mainMenu();
