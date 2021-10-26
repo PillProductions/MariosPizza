@@ -4,9 +4,12 @@ import java.util.*;
 public class Main {
     public static Scanner input = new Scanner(System.in);
     private static Menu myMenu = new Menu();
-    public static void main(String[] args) throws FileNotFoundException {
+    private static ViewOrder myViewMenu = new ViewOrder();
+
+    public static void main(String[] args) throws Exception {
         System.out.println("*** MARIOS PIZZA ***\n");
         myMenu.readMenu();
+        myViewMenu.readActiveOrders();
         mainMenu();
 
     }
@@ -17,6 +20,10 @@ public class Main {
         System.out.print("Indtast funktionsnummer: ");
         int select = Integer.parseInt(input.nextLine());
         if (select == 1){
+
+            for (int i=0; i<=ViewOrder.list.length-2; i++){
+                System.out.printf("%-100s %50s %n", ViewOrder.list[i].getNumber() + ". " + ViewOrder.list[i].getName() + ": " +ViewOrder.list[i].getIngredients(), ViewOrder.list[i].getPickupTime() + " " + ViewOrder.list[i].getPrice() + ".- , " + ViewOrder.list[i].getRecipientName() + " '" + ViewOrder.list[i].getComments() + "'");
+            }
 
         }else if (select == 2){
             System.out.println("Tryk 1 for at lave en ny ordre\nTryk 2 for at redigere en eksisterende ordre");
