@@ -19,32 +19,5 @@ public class Order {
     }
 
 
-    public static void createPizza(Scanner scan) {
 
-        System.out.println("Hvilken pizza ønsker du? ");
-        int input = scan.nextInt();
-        System.out.println("Du har valgt pizza nr " + input);
-        System.out.println("Vil du tilføje særlige ønsker? ");
-        scan.nextLine();
-        String input2 = scan.nextLine();
-        if (input2.equalsIgnoreCase("Ja")) {
-            System.out.println("Tilføj særlige ønsker");
-            String input3 = scan.nextLine();
-            System.out.println("Har du yderligere kommentarer?");
-            String input4 = scan.nextLine();
-            if (input4.equalsIgnoreCase("Ja")) {
-                System.out.println("Tilføj kommentarer");
-                scan.nextLine();
-                System.out.println("Gemmer og afslutter ordre ");
-            } else {
-                input4.equalsIgnoreCase("Nej");
-                System.out.println("Gemmer og afslutter ordre ");
-            }
-
-        }
-    }
-    public static void editOrder(Scanner scan){
-        System.out.println("Hvilken ordre vil du gerne redigere?");
-
-    }
 }

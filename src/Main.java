@@ -32,9 +32,9 @@ public class Main {
                 for (int i=0; i<=Menu.list.length-2; i++){
                 System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
             }
-                Order.createPizza(input);
+                createPizza(input);
             }if(select1 == 2){
-                Order.editOrder(input);
+                editOrder(input);
             }
             //Call edit order method
         }else if (select == 3){
@@ -49,6 +49,33 @@ public class Main {
         }
     }
 
+    public static void createPizza(Scanner scan) {
 
+        System.out.println("Hvilken pizza ønsker du? ");
+        int input = scan.nextInt();
+        System.out.println("Du har valgt pizza nr " + input);
+        System.out.println("Vil du tilføje særlige ønsker? ");
+        scan.nextLine();
+        String input2 = scan.nextLine();
+        if (input2.equalsIgnoreCase("Ja")) {
+            System.out.println("Tilføj særlige ønsker");
+            String input3 = scan.nextLine();
+            System.out.println("Har du yderligere kommentarer?");
+            String input4 = scan.nextLine();
+            if (input4.equalsIgnoreCase("Ja")) {
+                System.out.println("Tilføj kommentarer");
+                scan.nextLine();
+                System.out.println("Gemmer og afslutter ordre ");
+            } else {
+                input4.equalsIgnoreCase("Nej");
+                System.out.println("Gemmer og afslutter ordre ");
+            }
+
+        }
+    }
+    public static void editOrder(Scanner scan){
+        System.out.println("Hvilken ordre vil du gerne redigere?");
+
+    }
 
 }
