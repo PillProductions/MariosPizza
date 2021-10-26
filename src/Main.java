@@ -26,6 +26,8 @@ public class Main {
                 System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
             }
                 CreateOrder.createPizza(input);
+            }if(select1 == 2){
+                EditOrder.editOrder(input);
             }
             //Call edit order method
         }else if (select == 3){
