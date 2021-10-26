@@ -13,7 +13,7 @@ public class Main {
 
     public static void mainMenu(){
 
-        System.out.println("1: Se aktive ordre\n2: Rediger ordre\n3: Se ordre historik\n4: Se ordre statestik\n5: Lav ny ordre\n6: Slut program\n\n");
+        System.out.println("1: Se aktive ordre\n2: Rediger ordre\n3: Se ordre historik\n4: Se ordre statistik\n5: Lav ny ordre\n6: Slut program\n\n");
         System.out.print("Indtast funktionsnummer: ");
         int select = Integer.parseInt(input.nextLine());
         if (select == 1){

@@ -39,8 +39,6 @@ public class CreateOrder {
             } else {
                 input4.equalsIgnoreCase("Nej");
                 System.out.println("Gemmer og afslutter ordre ");
-
-
             }
 
         }
