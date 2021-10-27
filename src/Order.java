@@ -76,6 +76,8 @@ public class Order {
         int currentline = 0;
         File myObj = new File("active_orders.txt");
         Scanner myReader = new Scanner(myObj);
+        outputObj = null;
+        outputObj = new Order[1];
         while (myReader.hasNextLine()) {
             Pizza[] list = new Pizza[1];
             String[] commentparts = null;
@@ -100,7 +102,7 @@ public class Order {
         myReader.close();
 
         //Sorts array
-        for (int i = 0; i <= outputObj.length - 2; i++) {
+       for (int i = 0; i <= outputObj.length - 2; i++) {
             Order placeholder = outputObj[i];
             for (int o = i; o <= outputObj.length - 2; o++) {
                 if (outputObj[o].getPickupTime().before(outputObj[i].getPickupTime())) {
@@ -110,6 +112,8 @@ public class Order {
                 }
             }
         }
+
+
     }
 
 }

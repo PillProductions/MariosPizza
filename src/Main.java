@@ -19,7 +19,7 @@ public class Main {
 
     }
 
-    public static void mainMenu() throws IOException {
+    public static void mainMenu() throws Exception {
         System.out.println("1: Se aktive ordreliste\n2: Rediger ordreliste\n3: Se ordre historik\n4: Se ordre statistik\n5: Slut program\n\n");
         System.out.print("Indtast funktionsnummer: ");
         int select = Integer.parseInt(input.nextLine());
@@ -99,7 +99,7 @@ public class Main {
         System.out.println("Hvilken ordre vil du gerne redigere?");
     }
 
-    public static void viewActiveOrders() throws IOException {
+    public static void viewActiveOrders() throws Exception {
         KeyEvent.exitLoop = false;
         JFrame jf=new JFrame("Key listener");
         jf.setVisible(true);
@@ -110,8 +110,8 @@ public class Main {
             wait(500);
             timer++;
             if (timer==30) {
-                //We start by sorting (which is a very hacked together solution)
-
+                //First we read active orders
+                myOrder.readActiveOrders();
 
                 //Then we print
                 System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -125,6 +125,7 @@ public class Main {
                 }
                 timer=0; //Resets load of ViewOrder list
                 System.out.println("\n *** Tryk på en vilkårlig tast for at gå tilbage til hovedmenu ***");
+
             }
         }
         jf.setVisible(false); //you can't see me!
