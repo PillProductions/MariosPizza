@@ -1,6 +1,4 @@
 import javax.swing.*;
-import java.awt.event.*;
-import java.io.IOException;
 import java.util.*;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -14,9 +12,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         System.out.println("*** MARIOS PIZZA ***\n");
         myMenu.readMenu();
-        myOrder.readActiveOrders();
         mainMenu();
-
+        StringBuilder cmd = new StringBuilder();
     }
 
     public static void mainMenu() throws Exception {
@@ -115,23 +112,21 @@ public class Main {
 
                 //Then we print
                 System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-                for (int i = 0; i <= Order.outputObj.length - 2; i++) {
-                    System.out.println(Order.outputObj[i].getRecipientName().toUpperCase() + " - AFHENTES: " + Order.outputObj[i].getPickupTime().toString() + " - TOTAL PRIS: " + Order.outputObj[i].getFinalPrice());
-                    Pizza[] pizzaInOrder = Order.outputObj[i].getPizzaArray();
+                for (int i = 0; i <= myOrder.getActiveOrders().length - 2; i++) {
+                    System.out.println(myOrder.getActiveOrders()[i].getRecipientName().toUpperCase() + " - AFHENTES: " + myOrder.getActiveOrders()[i].getPickupTime().toString() + " - TOTAL PRIS: " + myOrder.getActiveOrders()[i].getFinalPrice());
+                    Pizza[] pizzaInOrder = myOrder.getActiveOrders()[i].getPizzaArray();
                     for (int o = 0; o <= pizzaInOrder.length - 2; o++) {
                         System.out.printf("%-50s %100s %n", pizzaInOrder[o].getNumber() + ". " + pizzaInOrder[o].getName() + " " + pizzaInOrder[o].getComments().toUpperCase(), pizzaInOrder[o].getIngredients() + " - PRIS: " + pizzaInOrder[o].getPrice() + ".-");
                     }
                     System.out.println();
                 }
                 timer=0; //Resets load of ViewOrder list
-                System.out.println("\n *** Tryk på en vilkårlig tast for at gå tilbage til hovedmenu ***");
+                System.out.println("\n *** Tryk på en vilkårlig tast for at afslutte programmet ***");
 
             }
         }
-        jf.setVisible(false); //you can't see me!
-        jf.dispose(); //Destroy the JFrame object
-        jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
     }
+
     public static void wait(int ms){ //Pauses program briefly to make it seem more natural
         try { //Thread needs to be able to catch exeption for some reason. Idk why
             Thread.sleep(ms);
@@ -139,6 +134,4 @@ public class Main {
             Thread.currentThread().interrupt();
         }
     }
-
-
 }

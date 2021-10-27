@@ -1,19 +1,15 @@
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.*;
+import java.io.*;
 
 public class Order {
 
     private String recipientName;
     private int finalPrice;
     private Timestamp pickupTime;
-    private Pizza[] pizzaArray = new Pizza[1];
+    private Pizza[] pizzaArray;
+    private Order[] outputObj = new Order[1];
 
     public Order(String pRecipientName, int pFinalPrice, Timestamp pPickupTime, Pizza[] PizzaArray) {
         this.recipientName = pRecipientName;
@@ -30,6 +26,10 @@ public class Order {
     public Timestamp getPickupTime(){return pickupTime;}
     public Pizza[] getPizzaArray(){
         return pizzaArray;
+    }
+    public Order[] getActiveOrders() throws Exception {
+        readActiveOrders();
+        return outputObj;
     }
 
     public void newOrder(Pizza[] orderArray, int finalprice, String recipientName, Timestamp pickupTime) {
@@ -50,7 +50,7 @@ public class Order {
             FileWriter myWriter = new FileWriter("active_orders.txt");
 
             for (int i=0; i<=orderArray.length-1; i++){
-                if(orderArray[i].getComments()!="Ingen kommentar") {
+                if(!Objects.equals(orderArray[i].getComments(), "Ingen kommentar")) {
                     output += orderArray[i].getNumber() + " & " + orderArray[i].getComments();
                 } else{
                     output += orderArray[i].getNumber();
@@ -69,14 +69,12 @@ public class Order {
         }
     }
 
-    public static Order[] outputObj = new Order[1];
+
 
     public void readActiveOrders()throws Exception  {
-        String output = "";
         int currentline = 0;
         File myObj = new File("active_orders.txt");
         Scanner myReader = new Scanner(myObj);
-        outputObj = null;
         outputObj = new Order[1];
         while (myReader.hasNextLine()) {
             Pizza[] list = new Pizza[1];
@@ -103,7 +101,7 @@ public class Order {
 
         //Sorts array
        for (int i = 0; i <= outputObj.length - 2; i++) {
-            Order placeholder = outputObj[i];
+            Order placeholder;
             for (int o = i; o <= outputObj.length - 2; o++) {
                 if (outputObj[o].getPickupTime().before(outputObj[i].getPickupTime())) {
                     placeholder = outputObj[i];
@@ -112,8 +110,5 @@ public class Order {
                 }
             }
         }
-
-
     }
-
 }
