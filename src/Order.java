@@ -21,7 +21,7 @@ public class Order {
             System.out.println("En fejl har opstået (Fejl 1).");
             e.printStackTrace();
         }
-        output += "\n" + recipientName + " // ";
+        output += recipientName + " // ";
         try {
             FileWriter myWriter = new FileWriter("active_orders.txt");
 
