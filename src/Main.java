@@ -149,6 +149,7 @@ public class Main {
 
             }
         }
+        exitLoop = false;
     }
 
     public static void viewOrderHistory() throws Exception {
