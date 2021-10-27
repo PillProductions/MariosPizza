@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Menu {
-    public static PizzaObj[] list = new PizzaObj[1];
+    public static Pizza[] list = new Pizza[1];
 
     public void readMenu()throws FileNotFoundException {
         int i = 0;
@@ -12,7 +12,7 @@ public class Menu {
         Scanner myReader = new Scanner(myObj);
         while (myReader.hasNextLine()) {
             String[] parts = myReader.nextLine().split(" // ");
-            PizzaObj output = new PizzaObj(parts[1], parts[2], "", Integer.parseInt(parts[0]), Integer.parseInt(parts[3]));
+            Pizza output = new Pizza(parts[1], parts[2], "", Integer.parseInt(parts[0]), Integer.parseInt(parts[3]));
             list[i]=output;
             list = Arrays.copyOf(list, list.length + 1); //Resize name array by one more
             i++;

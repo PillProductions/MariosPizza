@@ -1,14 +1,14 @@
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class PizzaObj {
+public class Pizza {
     private String comments;
     private String name;
     private String ingredients;
     private int number;
     private int price;
 
-  public PizzaObj(String pName, String pIngredients, String pComments, int pNumber, int pPrice){
+  public Pizza(String pName, String pIngredients, String pComments, int pNumber, int pPrice){
       this.comments = pComments;
       this.name = pName;
       this.ingredients = pIngredients;

@@ -9,17 +9,12 @@ import java.util.concurrent.TimeUnit;
 public class Main {
     public static Scanner input = new Scanner(System.in);
     private static Menu myMenu = new Menu();
-    private static ViewOrder myViewOrder = new ViewOrder();
-    private static Order myOrder = new Order();
-
-
-
-
-
+    private static Order myOrder = new Order("", 0, null, null);
+    
     public static void main(String[] args) throws Exception {
         System.out.println("*** MARIOS PIZZA ***\n");
         myMenu.readMenu();
-        myViewOrder.readActiveOrders();
+        myOrder.readActiveOrders();
         mainMenu();
 
     }
@@ -53,7 +48,7 @@ public class Main {
     }
 
     public static void createPizza(Scanner scan) {
-        PizzaObj[] currentOrder = new PizzaObj[1];
+        Pizza[] currentOrder = new Pizza[1];
         boolean orderFinished = false;
         int finalPrice = 0;
         int pizzaCount = 0; //Keeps count of pizza's in current order
@@ -78,7 +73,7 @@ public class Main {
             } else {
                 comments = "Ingen kommentar";
             }
-            currentOrder[pizzaCount] = new PizzaObj(Menu.list[pizzaNumber-1].getName(), Menu.list[pizzaNumber-1].getIngredients(), comments, pizzaNumber, Menu.list[pizzaNumber-1].getPrice());
+            currentOrder[pizzaCount] = new Pizza(Menu.list[pizzaNumber-1].getName(), Menu.list[pizzaNumber-1].getIngredients(), comments, pizzaNumber, Menu.list[pizzaNumber-1].getPrice());
             System.out.println("Vil du tilføje flere pizzaer? (Ja/Nej)");
             if (scan.nextLine().equalsIgnoreCase("nej")) {
                 orderFinished = true;
@@ -110,29 +105,19 @@ public class Main {
         jf.setVisible(true);
         jf.setSize(0,0);
         jf.addKeyListener(new KeyEvent());
-        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         int timer = 29;
         while (!KeyEvent.exitLoop) {
             wait(500);
             timer++;
             if (timer==30) {
                 //We start by sorting (which is a very hacked together solution)
-                for (int i = 0; i <= ViewOrder.outputObj.length - 2; i++) {
-                    OrderObj placeholder = ViewOrder.outputObj[i];
-                    for (int o = i; o <= ViewOrder.outputObj.length - 2; o++) {
-                        if (ViewOrder.outputObj[o].getPickupTime().before(ViewOrder.outputObj[i].getPickupTime())) {
-                            placeholder = ViewOrder.outputObj[i];
-                            ViewOrder.outputObj[i] = ViewOrder.outputObj[o];
-                            ViewOrder.outputObj[o] = placeholder;
-                        }
-                    }
-                }
+
 
                 //Then we print
                 System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-                for (int i = 0; i <= ViewOrder.outputObj.length - 2; i++) {
-                    System.out.println(ViewOrder.outputObj[i].getRecipientName().toUpperCase() + " - AFHENTES: " + ViewOrder.outputObj[i].getPickupTime().toString() + " - TOTAL PRIS: " + ViewOrder.outputObj[i].getFinalPrice());
-                    PizzaObj[] pizzaInOrder = ViewOrder.outputObj[i].getPizzaArray();
+                for (int i = 0; i <= Order.outputObj.length - 2; i++) {
+                    System.out.println(Order.outputObj[i].getRecipientName().toUpperCase() + " - AFHENTES: " + Order.outputObj[i].getPickupTime().toString() + " - TOTAL PRIS: " + Order.outputObj[i].getFinalPrice());
+                    Pizza[] pizzaInOrder = Order.outputObj[i].getPizzaArray();
                     for (int o = 0; o <= pizzaInOrder.length - 2; o++) {
                         System.out.printf("%-50s %100s %n", pizzaInOrder[o].getNumber() + ". " + pizzaInOrder[o].getName() + " " + pizzaInOrder[o].getComments().toUpperCase(), pizzaInOrder[o].getIngredients() + " - PRIS: " + pizzaInOrder[o].getPrice() + ".-");
                     }
