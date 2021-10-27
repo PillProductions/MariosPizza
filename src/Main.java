@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,6 +26,7 @@ public class Main {
         System.out.print("Indtast funktionsnummer: ");
         int select = Integer.parseInt(input.nextLine());
         if (select == 1){
+            System.out.println("\n\n*** INDLÆSER, VENT VENLIGST ***\n\n");
             viewActiveOrders();
         }else if (select == 2){
             editOrder(input);
@@ -109,15 +112,25 @@ public class Main {
         editOrder(input);
     }
 
-
+    public static boolean exitLoop = false;
     public static void viewActiveOrders() throws Exception {
-        KeyEvent.exitLoop = false;
+
         JFrame jf=new JFrame("Key listener"); //Creating semi-invisible JFrame to detect keystrokes (NEEDS TO BE IN FOCUS)
         jf.setVisible(true);
-        jf.setSize(0,0);
-        jf.addKeyListener(new KeyEvent());
+        jf.setSize(150,75);
+        jf.setAlwaysOnTop(true);
+        JButton b=new JButton("Afslut");
+        b.setBounds(0,0,150,75);
+        b.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                exitLoop=true;
+                jf.setVisible(false);
+                jf.dispose();
+            }
+        });
+        jf.add(b);
         int timer = 29;
-        while (!KeyEvent.exitLoop) {
+        while (!exitLoop) {
             wait(500);
             timer++;
             if (timer==30) {
@@ -132,7 +145,7 @@ public class Main {
                     System.out.println();
                 }
                 timer=0; //Resets load of ViewOrder list
-                System.out.println("\n *** Tryk på en vilkårlig tast for at afslutte programmet ***");
+                System.out.println("\n *** Tryk på AFSLUT for at returnere til hovedmenu ***");
 
             }
         }
@@ -186,6 +199,6 @@ public class Main {
         }
     }
 
-    public static int randomNum(int min, int max){
+    public static int randomNum(int min, int max){ //Generates random number between two ints
         return(ThreadLocalRandom.current().nextInt(min, max + 1));}
 }
