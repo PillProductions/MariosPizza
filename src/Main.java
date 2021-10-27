@@ -1,37 +1,40 @@
-import java.io.FileNotFoundException;
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static Scanner input = new Scanner(System.in);
     private static Menu myMenu = new Menu();
-    private static ViewOrder myViewMenu = new ViewOrder();
+    private static ViewOrder myViewOrder = new ViewOrder();
+    private static Order myOrder = new Order();
+
+
+
+
 
     public static void main(String[] args) throws Exception {
         System.out.println("*** MARIOS PIZZA ***\n");
         myMenu.readMenu();
-        myViewMenu.readActiveOrders();
+        myViewOrder.readActiveOrders();
         mainMenu();
 
     }
 
-    public static void mainMenu(){
-
-        System.out.println("1: Se aktive ordre\n2: Rediger ordre\n3: Se ordre historik\n4: Se ordre statistik\n5: Lav ny ordre\n6: Slut program\n\n");
+    public static void mainMenu() throws IOException {
+        System.out.println("1: Se aktive ordreliste\n2: Rediger ordreliste\n3: Se ordre historik\n4: Se ordre statistik\n5: Slut program\n\n");
         System.out.print("Indtast funktionsnummer: ");
         int select = Integer.parseInt(input.nextLine());
         if (select == 1){
-
-            for (int i=0; i<=ViewOrder.list.length-2; i++){
-                System.out.printf("%-100s %50s %n", ViewOrder.list[i].getNumber() + ". " + ViewOrder.list[i].getName() + ": " +ViewOrder.list[i].getIngredients(), ViewOrder.list[i].getPickupTime() + " " + ViewOrder.list[i].getPrice() + ".- , " + ViewOrder.list[i].getRecipientName() + " '" + ViewOrder.list[i].getComments() + "'");
-            }
-
+            viewActiveOrders();
         }else if (select == 2){
             System.out.println("Tryk 1 for at lave en ny ordre\nTryk 2 for at redigere en eksisterende ordre");
             int select1 = Integer.parseInt(input.nextLine());
             if (select1 == 1){
-                for (int i=0; i<=Menu.list.length-2; i++){
-                System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
-            }
+
                 createPizza(input);
             }if(select1 == 2){
                 editOrder(input);
@@ -50,32 +53,106 @@ public class Main {
     }
 
     public static void createPizza(Scanner scan) {
+        PizzaObj[] currentOrder = new PizzaObj[1];
+        boolean orderFinished = false;
+        int finalPrice = 0;
+        int pizzaCount = 0; //Keeps count of pizza's in current order
+        String comments = "";
+        String recipientName = "";
+        Date date = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15));
+        Timestamp pickupTime = new Timestamp(date.getTime());
 
-        System.out.println("Hvilken pizza ønsker du? ");
-        int input = scan.nextInt();
-        System.out.println("Du har valgt pizza nr " + input);
-        System.out.println("Vil du tilføje særlige ønsker? ");
-        scan.nextLine();
-        String input2 = scan.nextLine();
-        if (input2.equalsIgnoreCase("Ja")) {
-            System.out.println("Tilføj særlige ønsker");
-            String input3 = scan.nextLine();
-            System.out.println("Har du yderligere kommentarer?");
-            String input4 = scan.nextLine();
-            if (input4.equalsIgnoreCase("Ja")) {
-                System.out.println("Tilføj kommentarer");
-                scan.nextLine();
-                System.out.println("Gemmer og afslutter ordre ");
-            } else {
-                input4.equalsIgnoreCase("Nej");
-                System.out.println("Gemmer og afslutter ordre ");
+        while (orderFinished == false) {
+            for (int i=0; i<=Menu.list.length-2; i++){
+                System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
             }
-
+            System.out.println("\nHvilken pizza ønsker du? (Indtast nummer)");
+            int pizzaNumber = scan.nextInt();
+            scan.nextLine();
+            System.out.println("Du har valgt følgende pizza: " + pizzaNumber + ": " + Menu.list[pizzaNumber-1].getName() + ". - " + Menu.list[pizzaNumber-1].getIngredients() + " - " + Menu.list[pizzaNumber-1].getPrice() + ".-");
+            finalPrice += Menu.list[pizzaNumber-1].getPrice();
+            System.out.println("Skal der tilføjes nogle kommentarer? (ja/nej)");
+            if (scan.nextLine().equalsIgnoreCase("ja")) {
+                System.out.print("Tilføj kommentarer: ");
+                comments = scan.nextLine();
+            } else {
+                comments = "Ingen kommentar";
+            }
+            currentOrder[pizzaCount] = new PizzaObj(Menu.list[pizzaNumber-1].getName(), Menu.list[pizzaNumber-1].getIngredients(), comments, pizzaNumber, Menu.list[pizzaNumber-1].getPrice());
+            System.out.println("Vil du tilføje flere pizzaer? (Ja/Nej)");
+            if (scan.nextLine().equalsIgnoreCase("nej")) {
+                orderFinished = true;
+            } else {
+                currentOrder = Arrays.copyOf(currentOrder, currentOrder.length + 1); //Resize name array by one more
+                pizzaCount++;
+            }
         }
+
+        System.out.println("\nBestilling pris: " + finalPrice + ".-");
+        System.out.println("Hvad hedder kunden?:");
+        recipientName = scan.nextLine();
+        System.out.println("Hvornår skal pizzaen hentes?\n1: Om et kvarter\n2: Specielt tidspunkt");
+        if (scan.nextInt() == 2) {
+            Date dateCurrent = new Date();
+            pickupTime = new Timestamp(dateCurrent.getTime());
+        }
+        myOrder.newOrder(currentOrder, finalPrice, recipientName, pickupTime);
+        System.out.println("\n*** Bestilling tilføjet til " + pickupTime.toString() + " ***\n");
+        recipientName = scan.nextLine();
     }
     public static void editOrder(Scanner scan){
         System.out.println("Hvilken ordre vil du gerne redigere?");
-
     }
+
+    public static void viewActiveOrders() throws IOException {
+        KeyEvent.exitLoop = false;
+        JFrame jf=new JFrame("Key listener");
+        jf.setVisible(true);
+        jf.setSize(0,0);
+        jf.addKeyListener(new KeyEvent());
+        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        int timer = 29;
+        while (!KeyEvent.exitLoop) {
+            wait(500);
+            timer++;
+            if (timer==30) {
+                //We start by sorting (which is a very hacked together solution)
+                for (int i = 0; i <= ViewOrder.outputObj.length - 2; i++) {
+                    OrderObj placeholder = ViewOrder.outputObj[i];
+                    for (int o = i; o <= ViewOrder.outputObj.length - 2; o++) {
+                        if (ViewOrder.outputObj[o].getPickupTime().before(ViewOrder.outputObj[i].getPickupTime())) {
+                            placeholder = ViewOrder.outputObj[i];
+                            ViewOrder.outputObj[i] = ViewOrder.outputObj[o];
+                            ViewOrder.outputObj[o] = placeholder;
+                        }
+                    }
+                }
+
+                //Then we print
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                for (int i = 0; i <= ViewOrder.outputObj.length - 2; i++) {
+                    System.out.println(ViewOrder.outputObj[i].getRecipientName().toUpperCase() + " - AFHENTES: " + ViewOrder.outputObj[i].getPickupTime().toString() + " - TOTAL PRIS: " + ViewOrder.outputObj[i].getFinalPrice());
+                    PizzaObj[] pizzaInOrder = ViewOrder.outputObj[i].getPizzaArray();
+                    for (int o = 0; o <= pizzaInOrder.length - 2; o++) {
+                        System.out.printf("%-50s %100s %n", pizzaInOrder[o].getNumber() + ". " + pizzaInOrder[o].getName() + " " + pizzaInOrder[o].getComments().toUpperCase(), pizzaInOrder[o].getIngredients() + " - PRIS: " + pizzaInOrder[o].getPrice() + ".-");
+                    }
+                    System.out.println();
+                }
+                timer=0; //Resets load of ViewOrder list
+                System.out.println("\n *** Tryk på en vilkårlig tast for at gå tilbage til hovedmenu ***");
+            }
+        }
+        jf.setVisible(false); //you can't see me!
+        jf.dispose(); //Destroy the JFrame object
+        jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
+    }
+    public static void wait(int ms){ //Pauses program briefly to make it seem more natural
+        try { //Thread needs to be able to catch exeption for some reason. Idk why
+            Thread.sleep(ms);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
 
 }
