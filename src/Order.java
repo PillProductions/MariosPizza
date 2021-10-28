@@ -95,7 +95,7 @@ public class Order {
                 }
                 list = Arrays.copyOf(list, list.length + 1); //Resize name array by one more
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS"); //Get time + unique ID
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); //Get time + unique ID
             Date parsed = format.parse(fullparts[3]);
             java.sql.Timestamp timestamp = new java.sql.Timestamp(parsed.getTime());
             outputObj[currentline] = new Order(fullparts[0], Integer.parseInt(fullparts[2]), timestamp, list);
@@ -190,7 +190,7 @@ public class Order {
                 }
                 list = Arrays.copyOf(list, list.length + 1); //Resize name array by one more
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             Date parsed = format.parse(fullparts[3]);
             java.sql.Timestamp timestamp = new java.sql.Timestamp(parsed.getTime());
             outputHistoryObj[currentline] = new Order(fullparts[0], Integer.parseInt(fullparts[2]), timestamp, list);
