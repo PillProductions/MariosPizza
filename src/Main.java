@@ -1,3 +1,4 @@
+import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,7 @@ public class Main {
     }
 
     public static void mainMenu() throws Exception {
-        System.out.println("1: Se aktive ordreliste\n2: Rediger ordreliste\n3: Se ordre historik\n4: Se ordre statistik\n5: Slut program\n\n");
+        System.out.println("1: Se aktive ordreliste\n2: Rediger ordreliste\n3: Se ordre historik\n4: Se ordre statistik\n5: Vis menukort\n6: Slut program\n\n");
         System.out.print("Indtast funktionsnummer: ");
         int select = Integer.parseInt(input.nextLine());
         if (select == 1){
@@ -33,8 +34,25 @@ public class Main {
             viewOrderHistory();
         }else if (select == 4){
             generateStatistics();
-        }if (select != 5){
+        }else if (select == 5){
+            printPizzaMenu();
+            System.out.println("\n");
+        }if (select != 6){
             mainMenu();
+        }
+    }
+    public static void editOrder(Scanner scan) throws Exception {
+        System.out.println("1: Lav en ny ordre\n2: Afslut og fjern en eksisterende ordre\n3: Tilbage");
+        int select1 = Integer.parseInt(input.nextLine());
+        if (select1 == 1){
+            createPizza(input);
+        }if(select1 == 2){
+            endOrder(input);
+        }
+    }
+    public static void printPizzaMenu(){
+        for (int i=0; i<=Menu.list.length-2; i++){
+            System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
         }
     }
 
@@ -49,9 +67,7 @@ public class Main {
         Timestamp pickupTime = new Timestamp(date.getTime()); //Converted to Java.sql.Timestamp (no specific reason, this is just the standard in this project)
 
         while (!orderFinished) {
-            for (int i=0; i<=Menu.list.length-2; i++){
-                System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
-            }
+            printPizzaMenu();
             System.out.println("\nHvilken pizza ønsker du? (Indtast nummer)");
             int pizzaNumber = scan.nextInt();
             scan.nextLine();
@@ -90,22 +106,20 @@ public class Main {
         myOrder.newOrder(currentOrder, finalPrice, recipientName, pickupTime);
         System.out.println("\n*** Bestilling tilføjet til " + pickupTime.toString().substring(0,16) + " ***\n");
     }
-    public static void editOrder(Scanner scan) throws Exception {
-        System.out.println("1: Lav en ny ordre\n2: afslut og fjern en eksisterende ordre\n3: Tilbage");
-        int select1 = Integer.parseInt(input.nextLine());
-        if (select1 == 1){
-            createPizza(input);
-        }if(select1 == 2){
-            endOrder(input);
-        }
-    }
+
     public static void endOrder(Scanner scan) throws Exception {
         System.out.println("\nHvilken ordre vil du gerne afslutte?: \n");
         for (int i = 0; i<=myOrder.getActiveOrders().length -2; i++){
             System.out.println((i+1) + ": " + myOrder.getActiveOrders()[i].getRecipientName().toUpperCase() + " - AFHENTES: " + myOrder.getActiveOrders()[i].getPickupTime().toString() + " - TOTAL PRIS: " + myOrder.getActiveOrders()[i].getFinalPrice());
         }
         System.out.print("\nIndtast nummer: ");
-        myOrder.removeOrder(myOrder.getActiveOrders()[(Integer.parseInt(scan.nextLine())-1)]);
+        int delNumber = Integer.parseInt(scan.nextLine());
+        System.out.println("Vil du gemme i ordre historik?\n1: Ja\n2: Nej");
+        if(Integer.parseInt(scan.nextLine())==1){
+            myOrder.removeOrder(myOrder.getActiveOrders()[delNumber-1], true);
+        }else {
+            myOrder.removeOrder(myOrder.getActiveOrders()[delNumber - 1], false);
+        }
         System.out.println("\n*** Ordre fjernet ***\n");
         editOrder(input);
     }
@@ -126,7 +140,7 @@ public class Main {
                 jf.dispose();
             }
         });
-        jf.add(b);
+       jf.add(b);
         int timer = 29;
         while (!exitLoop) { //Loops until button has been presset
             wait(500);

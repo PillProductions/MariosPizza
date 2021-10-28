@@ -117,7 +117,7 @@ public class Order {
         }
     }
 
-    public void removeOrder(Order orderObj){
+    public void removeOrder(Order orderObj, boolean save){
         String output = "";
 
         try {
@@ -128,9 +128,9 @@ public class Order {
                 if (!currentline.contains(orderObj.getPickupTime().toString().substring(0, 18))) { //Then, if the file contains same timestamp as the requested removal, it will not be saved in output string
                     output += currentline + "\n";
                 } else if(currentline.contains(orderObj.getPickupTime().toString())){
-                    writeToHistory(currentline); //Calling writeToHistory method, to move order to order_history.txt
+                    if (save){writeToHistory(currentline);}    //Calling writeToHistory method, to move order to order_history.txt
                 }else {
-                    writeToHistory(currentline);
+                    if (save){writeToHistory(currentline);}
                 }
             }
             myReader.close();
