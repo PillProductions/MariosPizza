@@ -121,8 +121,8 @@ public class Main {
         b.setBounds(0,0,150,75);
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){ //Button action if pressed
-                exitLoop=true;
-                jf.setVisible(false);
+                exitLoop=true; //End loop reading file
+                jf.setVisible(false); //Make JFrame invisible
                 jf.dispose();
             }
         });
