@@ -1,5 +1,4 @@
-import java.sql.Date;
-import java.sql.Timestamp;
+//This is pizza class, used to initialize pizza objects
 
 public class Pizza {
     private String comments;
@@ -8,7 +7,7 @@ public class Pizza {
     private int number;
     private int price;
 
-  public Pizza(String pName, String pIngredients, String pComments, int pNumber, int pPrice){
+  public Pizza(String pName, String pIngredients, String pComments, int pNumber, int pPrice){ //Constructor
       this.comments = pComments;
       this.name = pName;
       this.ingredients = pIngredients;

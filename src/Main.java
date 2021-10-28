@@ -11,14 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static Scanner input = new Scanner(System.in);
-    private static Menu myMenu = new Menu();
-    private static Order myOrder = new Order("", 0, null, null);
+    private static Menu myMenu = new Menu(); //Create instance of menu, in order to call methods
+    private static Order myOrder = new Order("", 0, null, null); //Create instance of Order, in order to call methods
     
     public static void main(String[] args) throws Exception {
         System.out.println("*** MARIOS PIZZA ***\n");
-        myMenu.readMenu();
+        myMenu.readMenu(); //Menu items are initialized, could have been solved with a get-set instead
         mainMenu();
-        StringBuilder cmd = new StringBuilder();
     }
 
     public static void mainMenu() throws Exception {
@@ -40,16 +39,16 @@ public class Main {
     }
 
     public static void createPizza(Scanner scan) throws ParseException {
-        Pizza[] currentOrder = new Pizza[1];
-        boolean orderFinished = false;
-        int finalPrice = 0;
+        Pizza[] currentOrder = new Pizza[1]; //Creates empty array of pizza objects
+        boolean orderFinished = false; //Made for while loop
+        int finalPrice = 0; //Keeps track of total price
         int pizzaCount = 0; //Keeps count of pizza's in current order
-        String comments = "";
-        String recipientName = "";
-        Date date = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15));
-        Timestamp pickupTime = new Timestamp(date.getTime());
+        String comments;
+        String recipientName;
+        Date date = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15)); //Current time +15 min
+        Timestamp pickupTime = new Timestamp(date.getTime()); //Converted to Java.sql.Timestamp (no specific reason, this is just the standard in this project)
 
-        while (orderFinished == false) {
+        while (!orderFinished) {
             for (int i=0; i<=Menu.list.length-2; i++){
                 System.out.printf("%-100s %10s %n", Menu.list[i].getNumber() + ". " + Menu.list[i].getName() + ": " +Menu.list[i].getIngredients(), Menu.list[i].getPrice() + ".-");
             }
@@ -79,8 +78,7 @@ public class Main {
         System.out.println("Hvad hedder kunden?:");
         recipientName = scan.nextLine();
         System.out.println("Hvornår skal pizzaen hentes?\n1: Om et kvarter\n2: Specielt tidspunkt");
-        if (scan.nextInt() == 2) { //Shitty code to convert string to date in case cx wants custom pickup time
-            scan.nextLine();
+        if (Integer.parseInt(scan.nextLine()) == 2) { //Shitty code to convert string to date in case cx wants custom pickup time
             System.out.println("Indtast tidspunkt i følgende format: HH:MM (Eks. 18:30)");
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
             Date today = new Date();
@@ -115,14 +113,14 @@ public class Main {
     public static boolean exitLoop = false;
     public static void viewActiveOrders() throws Exception {
 
-        JFrame jf=new JFrame("Key listener"); //Creating semi-invisible JFrame to detect keystrokes (NEEDS TO BE IN FOCUS)
-        jf.setVisible(true);
+        JFrame jf=new JFrame("Key listener"); //Creating JFrame with button
+        jf.setVisible(true); //This is done so the while loop below can be broken, without needing scanner input
         jf.setSize(150,75);
-        jf.setAlwaysOnTop(true);
+        jf.setAlwaysOnTop(true); //Keep window on top to avoid confusion
         JButton b=new JButton("Afslut");
         b.setBounds(0,0,150,75);
         b.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e){ //Button action if pressed
                 exitLoop=true;
                 jf.setVisible(false);
                 jf.dispose();
@@ -130,7 +128,7 @@ public class Main {
         });
         jf.add(b);
         int timer = 29;
-        while (!exitLoop) {
+        while (!exitLoop) { //Loops until button has been presset
             wait(500);
             timer++;
             if (timer==30) {
@@ -157,8 +155,8 @@ public class Main {
         Order[] orderHistory = myOrder.getHistoricalOrders(); //Gets active orders as Order[] array named activeOrders
         for (int i = 0; i <= orderHistory.length - 2; i++) {
             System.out.println(orderHistory[i].getRecipientName().toUpperCase() + " - AFHENTES: " + orderHistory[i].getPickupTime().toString() + " - TOTAL PRIS: " + orderHistory[i].getFinalPrice());
-            Pizza[] pizzaInOrder = orderHistory[i].getPizzaArray();
-            for (int o = 0; o <= pizzaInOrder.length - 2; o++) {
+            Pizza[] pizzaInOrder = orderHistory[i].getPizzaArray(); //Gets array of pizzas within order
+            for (int o = 0; o <= pizzaInOrder.length - 2; o++) { //Prints array of pizzas
                 System.out.printf("%-50s %100s %n", pizzaInOrder[o].getNumber() + ". " + pizzaInOrder[o].getName() + " " + pizzaInOrder[o].getComments().toUpperCase(), pizzaInOrder[o].getIngredients() + " - PRIS: " + pizzaInOrder[o].getPrice() + ".-");
             }
             System.out.println();
@@ -168,8 +166,8 @@ public class Main {
     public static void generateStatistics() throws Exception {
         System.out.println("\n\n*** GENERERER STATESTIK ***\n");
         Order[] HistoricalOrder = myOrder.getHistoricalOrders();
-        int intArray[] = new int[Menu.list.length]; //Keeps score per sale of each pizza on menu
-        int max = 0; //Keeps track of highest score
+        int[] intArray = new int[Menu.list.length]; //Keeps score per sale of each pizza on menu
+        int max = 0; //Keeps track of the highest score
 
         for (int i=0; i<=HistoricalOrder.length-2; i++){ //We start by looping through historical orders
             for (int o=0; o<=HistoricalOrder[i].getPizzaArray().length-2; o++){ //Then we loop through sold pizzas in each order
