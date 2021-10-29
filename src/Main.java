@@ -185,12 +185,8 @@ public class Main {
 
         for (int i=0; i<=HistoricalOrder.length-2; i++){ //We start by looping through historical orders
             for (int o=0; o<=HistoricalOrder[i].getPizzaArray().length-2; o++){ //Then we loop through sold pizzas in each order
-                for (int x=1; x<=Menu.list.length+1; x++){ //Then we loop through every possible pizza number on the menu
-                    if (HistoricalOrder[i].getPizzaArray()[o].getNumber()==x){ //Finally, we check if the pizza number is equivalent to the current number x in our for loop
-                        intArray[x-1]++; //If so, our int arrays equivalent item to the menu number gets +1
-                        if(intArray[x-1]>max){max=intArray[x-1];} //Updates max score
-                    }
-                }
+                intArray[HistoricalOrder[i].getPizzaArray()[o].getNumber()-1]++; //If so, our int arrays equivalent item to the menu number gets +1
+                if(intArray[HistoricalOrder[i].getPizzaArray()[o].getNumber()-1]>max){max=intArray[HistoricalOrder[i].getPizzaArray()[o].getNumber()-1];} //Updates max score
             }
         }
         //Now we print the results in a sorted order
