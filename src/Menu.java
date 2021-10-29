@@ -17,7 +17,6 @@ public class Menu {
             list = Arrays.copyOf(list, list.length + 1); //Resize name array by one more
             i++;
         }
-
         myReader.close();
     }
 }

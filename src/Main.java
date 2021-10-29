@@ -1,4 +1,3 @@
-import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    public static Scanner input = new Scanner(System.in);
+    private static Scanner input = new Scanner(System.in);
     private static Menu myMenu = new Menu(); //Create instance of menu, in order to call methods
     private static Order myOrder = new Order("", 0, null, null); //Create instance of Order, in order to call methods
     
@@ -24,6 +23,7 @@ public class Main {
     public static void mainMenu() throws Exception {
         System.out.println("1: Se aktive ordreliste\n2: Rediger ordreliste\n3: Se ordre historik\n4: Se ordre statistik\n5: Vis menukort\n6: Slut program\n\n");
         System.out.print("Indtast funktionsnummer: ");
+
         int select = Integer.parseInt(input.nextLine());
         if (select == 1){
             System.out.println("\n\n*** INDLÆSER, VENT VENLIGST ***\n\n");
@@ -85,7 +85,7 @@ public class Main {
             if (scan.nextLine().equalsIgnoreCase("nej")) {
                 orderFinished = true;
             } else {
-                currentOrder = Arrays.copyOf(currentOrder, currentOrder.length + 1); //Resize name array by one more
+                currentOrder = Arrays.copyOf(currentOrder, currentOrder.length + 1); //Resize array by one more
                 pizzaCount++;
             }
         }
@@ -95,7 +95,7 @@ public class Main {
         recipientName = scan.nextLine();
         System.out.println("Hvornår skal pizzaen hentes?\n1: Om et kvarter\n2: Specielt tidspunkt");
         if (Integer.parseInt(scan.nextLine()) == 2) { //Shitty code to convert string to date in case cx wants custom pickup time
-            System.out.println("Indtast tidspunkt i følgende format: HH:MM (Eks. 18:30)");
+                System.out.println("Indtast tidspunkt i følgende format: HH:MM (Eks. 18:30)");
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
             Date today = new Date();
             String inputDate = (formatter1.format(today) + " " + scan.nextLine() + ":" + randomNum(10,59) + "." + randomNum(100,999));
@@ -110,7 +110,7 @@ public class Main {
     public static void endOrder(Scanner scan) throws Exception {
         System.out.println("\nHvilken ordre vil du gerne afslutte?: \n");
         for (int i = 0; i<=myOrder.getActiveOrders().length -2; i++){
-            System.out.println((i+1) + ": " + myOrder.getActiveOrders()[i].getRecipientName().toUpperCase() + " - AFHENTES: " + myOrder.getActiveOrders()[i].getPickupTime().toString() + " - TOTAL PRIS: " + myOrder.getActiveOrders()[i].getFinalPrice());
+            System.out.println((i+1) + ": " + myOrder.getActiveOrders()[i].getRecipientName().toUpperCase() + " - AFHENTES: " + myOrder.getActiveOrders()[i].getPickupTime().toString().substring(0,16) + " - TOTAL PRIS: " + myOrder.getActiveOrders()[i].getFinalPrice());
         }
         System.out.print("\nIndtast nummer: ");
         int delNumber = Integer.parseInt(scan.nextLine());
@@ -124,10 +124,10 @@ public class Main {
         editOrder(input);
     }
 
-    public static boolean exitLoop = false;
+    private static boolean exitLoop = false;
     public static void viewActiveOrders() throws Exception {
 
-        JFrame jf=new JFrame("Key listener"); //Creating JFrame with button
+        JFrame jf=new JFrame(""); //Creating JFrame with button
         jf.setVisible(true); //This is done so the while loop below can be broken, without needing scanner input
         jf.setSize(150,75);
         jf.setAlwaysOnTop(true); //Keep window on top to avoid confusion
@@ -142,14 +142,14 @@ public class Main {
         });
        jf.add(b);
         int timer = 29;
-        while (!exitLoop) { //Loops until button has been presset
+        while (!exitLoop) { //Loops until button has been pressed
             wait(500);
             timer++;
             if (timer==30) {
                 Order[] activeOrders = myOrder.getActiveOrders(); //Gets active orders as Order[] array named activeOrders
-                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                 for (int i = 0; i <= activeOrders.length - 2; i++) {
-                    System.out.println(activeOrders[i].getRecipientName().toUpperCase() + " - AFHENTES: " + activeOrders[i].getPickupTime().toString() + " - TOTAL PRIS: " + activeOrders[i].getFinalPrice());
+                    System.out.println(activeOrders[i].getRecipientName().toUpperCase() + " - AFHENTES: " + activeOrders[i].getPickupTime().toString().substring(0,16) + " - TOTAL PRIS: " + activeOrders[i].getFinalPrice());
                     Pizza[] pizzaInOrder = activeOrders[i].getPizzaArray();
                     for (int o = 0; o <= pizzaInOrder.length - 2; o++) {
                         System.out.printf("%-50s %100s %n", pizzaInOrder[o].getNumber() + ". " + pizzaInOrder[o].getName() + " " + pizzaInOrder[o].getComments().toUpperCase(), pizzaInOrder[o].getIngredients() + " - PRIS: " + pizzaInOrder[o].getPrice() + ".-");
@@ -178,7 +178,7 @@ public class Main {
     }
 
     public static void generateStatistics() throws Exception {
-        System.out.println("\n\n*** GENERERER STATESTIK ***\n");
+        System.out.println("\n\n*** GENERER STATISTIK ***\n");
         Order[] HistoricalOrder = myOrder.getHistoricalOrders();
         int[] intArray = new int[Menu.list.length]; //Keeps score per sale of each pizza on menu
         int max = 0; //Keeps track of the highest score
